@@ -4,20 +4,20 @@
 For the main required Python packages (numpy, scipy, etc.) we recommend using
 [Anaconda for Python 3.6](https://www.continuum.io/downloads)
 
-## Installing package and dependencies for HippMapp3r locally
+## Installing package and dependencies for VentMapp3r locally
 
 1. Clone repository
 
-        git clone https://github.com/mgoubran/HippMapp3r.git HippMapp3r
+        git clone https://github.com/mgoubran/VentMapp3r.git VentMapp3r
 
         (or install zip file and uncompress)
 
-        cd HippMapp3r
+        cd VentMapp3r
 
-    If you want to create a virtual environment where HippMapp3r can be run,
+    If you want to create a virtual environment where VentMapp3r can be run,
 
-        conda create -n hippmapper python=3.6 anaconda
-        source activate hippmapper
+        conda create -n ventmapper python=3.6 anaconda
+        source activate ventmapper
     
     To end the session,
     
@@ -25,7 +25,7 @@ For the main required Python packages (numpy, scipy, etc.) we recommend using
     
     To remove the environment
     
-        conda env remove --name hippmapper
+        conda env remove --name ventmapper
 
 2. Install dependencies
     
@@ -33,19 +33,19 @@ For the main required Python packages (numpy, scipy, etc.) we recommend using
     
     If the computer you are using has a GPU:
         
-        pip install -e .[hippmapper_gpu]
+        pip install -e .[ventmapper_gpu]
 
     If not:
     
-        pip install -e .[hippmapper]
+        pip install -e .[ventmapper]
 
 3. Test the installation by running
 
-        hippmapper --help
+        ventmapper --help
         
    To confirm that the command line function works, and
    
-        hippmapper
+        ventmapper
         
    To launch the interactive GUI.
 
@@ -57,8 +57,8 @@ Download the models from [this link](https://drive.google.com/open?id=10aVCDurd_
     pip3 install argcomplete
     activate-global-python-argcomplete
 
-## Updating HippMapp3r
-To update HippMapp3r, navigate to the directory where HippMapp3r was cloned and run
+## Updating VentMapp3r
+To update VentMapp3r, navigate to the directory where VentMapp3r was cloned and run
 
     git pull
     pip install -e .[{option}] -process-dependency-links

@@ -21,7 +21,7 @@ Your output file will automatically appear in your t1w folder.
 
 ## Command Line
 
-    hippmapper seg_hipp
+    ventmapper seg_hipp
     
     Optional arguments:
     -s , --subj       input subject
@@ -32,8 +32,8 @@ Your output file will automatically appear in your t1w folder.
     -ss , --session   input session for longitudinal studies
     
     Examples:
-    hippmapper seg_hipp -s subjectname -b
-    hippmapper seg_hipp -t1 subject_T1_nu.nii.gz -o subject_hipp.nii.gz
+    ventmapper seg_hipp -s subjectname -b
+    ventmapper seg_hipp -t1 subject_T1_nu.nii.gz -o subject_hipp.nii.gz
 
 The output should look like this.:
 
