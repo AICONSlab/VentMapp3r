@@ -61,12 +61,12 @@ def get_parser():
     subparsers = parser.add_subparsers()
     # --------------
 
-    # seg hippocampus (hipp)
-    hipp_parser = ventmapper.parsefn()
-    parser_seg_hipp = subparsers.add_parser('seg_hipp', add_help=False, parents=[hipp_parser],
-                                            help="Segment hippocampus using a trained CNN",
-                                            usage=hipp_parser.usage)
-    parser_seg_hipp.set_defaults(func=run_ventmapper)
+    # seg ventricles (vent)
+    vent_parser = ventmapper.parsefn()
+    parser_seg_vent = subparsers.add_parser('seg_vent', add_help=False, parents=[vent_parser],
+                                            help="Segment ventricles using a trained CNN",
+                                            usage=vent_parser.usage)
+    parser_seg_vent.set_defaults(func=run_ventmapper)
 
     # --------------
 
@@ -97,11 +97,11 @@ def get_parser():
 
     # --------------
 
-    # hipp vol seg
-    hp_vol_parser = summary_hp_vols.parsefn()
+    # vent vol seg
+    vent_vol_parser = summary_hp_vols.parsefn()
     parser_stats_hp = subparsers.add_parser('stats_hp', add_help=False, parents=[hp_vol_parser],
-                                            help="Generates volumetric summary of hippocampus segmentations",
-                                            usage=hp_vol_parser.usage)
+                                            help="Generates volumetric summary of ventricular segmentations",
+                                            usage=vent_vol_parser.usage)
     parser_stats_hp.set_defaults(func=run_hp_seg_summary)
 
     # --------------

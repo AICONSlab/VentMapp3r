@@ -78,10 +78,10 @@ nested_dict = {
     'Segmentation': {
         'functions': {
             0: {
-                'name': 'Hippocampus',
-                'script': 'seg_hipp',
-                'opts': '-t seg_hipp -v t1w -f out',
-                'helpmsg': 'Segments hippocampus using a trained CNN'
+                'name': 'Ventricles',
+                'script': 'seg_vent',
+                'opts': '-t seg_vent -v t1w -f out',
+                'helpmsg': 'Segments the ventricular system using a trained CNN'
             },
         }
     },
@@ -100,10 +100,10 @@ nested_dict = {
     'Statistics': {
         'functions': {
             0: {
-                'name': 'Hippocampal Volume Summary',
+                'name': 'Ventricular Sytem Volume Summary',
                 'script': 'stats_hp',
                 'opts': '-t stats_hp -v in_dir -f out_csv',
-                'helpmsg': 'Generates volumetric summary of hippocampus segmentations'
+                'helpmsg': 'Generates volumetric summary of ventricular segmentations'
             },
         }
     },

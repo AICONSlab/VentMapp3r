@@ -11,9 +11,9 @@ Welcome to VentMapp3r's documentation!
     :alt: Graph abstract
     :align: center
 
-*VentMapp3r* (pronounced ventmapper) is a CNN-based segmentation technique of the whole hippocampus
+*VentMapp3r* (pronounced ventmapper) is a CNN-based segmentation technique of the ventricular system
 using MRI images from BrainLab.
-It can deal with brains with extensive atrophy and segments the hippocampi in seconds.
+It can deal with brains with extensive atrophy and segments the ventricles in seconds.
 It uses a T1-weighted image as the only input and segments both with-skull and skull-stripped images.
 
 .. image:: images/graph_abstract.png
@@ -28,7 +28,7 @@ It uses a T1-weighted image as the only input and segments both with-skull and s
    before_install
    install
    beginner
-   hipp_seg
+   vent_seg
    issues
    docker
 

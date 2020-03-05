@@ -26,7 +26,7 @@ You can see all the ventmapper commands by typing either of the following lines:
 Once you know the command you want to know from the list, you can see more information about the command. For example, to learn more about seg_hfb:
 
     ventmapper seg_hipp -h
-    ventmapper seg_hipp --help
+    ventmapper seg_vent --help
 
 ## Hippocampal volumes
 To extract hippocampal volumes use the GUI (Stats/Hippocampal Volumes) or command line:
