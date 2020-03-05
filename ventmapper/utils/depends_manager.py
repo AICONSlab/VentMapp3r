@@ -2,7 +2,7 @@ import os
 import sys
 import subprocess
 
-from miracl import DEPENDS_DIR
+from ventmapper import DEPENDS_DIR
 
 class add_paths():
     """ Context manager to add necessary paths to PATH environment variable. Files will be removed after use
