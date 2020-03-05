@@ -1,3 +1,5 @@
+import os
+
 import ventmapper.convert
 import ventmapper.preprocess
 import ventmapper.segment
