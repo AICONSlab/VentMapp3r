@@ -20,9 +20,9 @@ from termcolor import colored
 import subprocess
 
 
-from hypermatter.deep.predict import run_test_case
-from hypermatter.qc import seg_qc
-from hypermatter.utils import endstatement
+from ventmapper.deep.predict import run_test_case
+from ventmapper.qc import seg_qc
+from ventmapper.utils import endstatement
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = "3"
 
