@@ -16,6 +16,7 @@ from ventmapper.convert import filetype
 from ventmapper.preprocess import biascorr, trim_like
 from ventmapper.qc import seg_qc
 from ventmapper.stats import summary_hp_vols
+from ventmapper.utils.depends_manager import add_paths
 
 warnings.simplefilter("ignore")
 # warnings.simplefilter("ignore", RuntimeWarning)
@@ -159,7 +160,8 @@ def main(args=None):
         handler.setFormatter(formatter)
         root.addHandler(handler)
 
-        args.func(args)
+        with add_paths():
+            args.func(args)
 
     else:
         gui.main()
