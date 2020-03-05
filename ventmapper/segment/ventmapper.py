@@ -7,7 +7,6 @@ import argparse
 import glob
 import nibabel as nib
 import numpy as np
-import mahotas as mh
 import os
 import sys
 from datetime import datetime
@@ -176,33 +175,6 @@ def copy_orient(in_img_file, ref_img_file, out_img_file):
     c3.inputs.out_file = out_img_file
     c3.run()
 
-def extract_from_center(ventricles_img, mask_brain):
-    # smoothing
-    pred_sm = smooth_img(ventricles_img, fwhm=2)
-
-    # thresold the smoothed mask at 0.45, get the arr for more processing
-    pred_th = np.zeros_like(mask_brain.get_data())
-    pred_th[pred_sm.get_data() > 0.45] = 1
-    pred_th[pred_sm.get_data() <= 0.45] = 0
-
-    # center of mask, dilated
-    mask_arr = mask_brain.get_data()
-    center_of_mass = ndimage.center_of_mass(mask_arr)
-    mask_csf_ball = np.zeros_like(mask_arr)
-    mask_csf_ball[int(center_of_mass[0]), int(center_of_mass[1]), int(center_of_mass[2])] = 1
-    mask_csf_ball = ndimage.binary_dilation(mask_csf_ball, iterations=10)
-
-    # extract largest object
-    label_pred, nr_objects = mh.label(pred_th)
-    intersect_labels = np.unique(label_pred[mask_csf_ball])
-    pred_component = np.zeros_like(mask_brain)
-    pred_component = functools.reduce(np.logical_or, (label_pred == v for v in intersect_labels if v != 0))
-
-    # return result as nifti image
-    pred_res = nib.Nifti1Image(pred_component.astype(int), ventricles_img.get_affine(), ventricles_img.header)
-
-    return pred_res
-
 def main(args):
     parser = parsefn()
     subj_dir, subj, t1, fl, t2, mask, out, force = parse_inputs(parser, args)
@@ -324,10 +296,6 @@ def main(args):
         pred_res = resample_to_img(pred, t1_img, interpolation="linear")
         pred_prob_name = os.path.join(pred_dir, "%s_%s_pred_prob.nii.gz" % (subj, model_name))
         nib.save(pred_res, pred_prob_name)
-
-        # mask_img = nib.load(mask)
-        # pred_comp = extract_from_center(pred_res, mask_img, thresh=0.5)
-        # nib.save(pred_comp, prediction)
 
         pred_res_th = math_img('img > 0.5', img=pred_res)
         pred_name = os.path.join(pred_dir, "%s_%s_pred.nii.gz" % (subj, model_name))
