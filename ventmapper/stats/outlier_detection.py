@@ -118,4 +118,4 @@ df['Outlier_Prob'] = df.Subject.map(probs_dict)
 df['Outlier_Prob'] = df.Outlier_Prob.fillna('L')
 
 date_str = datetime.date.today().strftime("%d%m%y")
-df.to_csv('%s/hippocampal_volumes_with_outlier_prob_%s.csv' % (proj_dir, date_str), index=False)
+df.to_csv('%s/ventricular_volumes_with_outlier_prob_%s.csv' % (proj_dir, date_str), index=False)
