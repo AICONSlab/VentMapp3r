@@ -7,7 +7,6 @@ import argparse
 import glob
 import nibabel as nib
 import numpy as np
-import mahotas as mh
 import os
 import sys
 from datetime import datetime
@@ -17,10 +16,13 @@ from nipype.interfaces.c3 import C3d
 from pathlib import Path
 from scipy import ndimage
 import functools
+from termcolor import colored
+import subprocess
 
-from hypermatter.deep.predict import run_test_case
-from hypermatter.qc import seg_qc
-from hypermatter.utils import endstatement
+
+from ventmapper.deep.predict import run_test_case
+from ventmapper.qc import seg_qc
+from ventmapper.utils import endstatement
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = "3"
 
@@ -86,8 +88,44 @@ def parse_inputs(parser, args):
     # return subj_dir, subj, t1, fl, mask, out, force
     return subj_dir, subj, t1, fl, t2, mask, out, force
 
+def orient_img(in_img_file, orient_tag, out_img_file):
+    c3 = C3d()
+    c3.inputs.in_file = in_img_file
+    c3.inputs.args = "-orient %s" % orient_tag
+    c3.inputs.out_file = out_img_file
+    c3.run()
 
-def resample(image, new_shape, interpolation="continuous"):
+def check_orient(in_img_file, r_orient, l_orient, out_img_file):
+    """
+    Check image orientation and re-orient if not in standard orientation (RPI or LPI)
+    :param in_img_file: input_image
+    :param r_orient: right ras orientation
+    :param l_orient: left las orientation
+    :param out_img_file: output oriented image
+    """
+    res = subprocess.run('c3d %s -info' % in_img_file, shell=True, stdout=subprocess.PIPE)
+    out = res.stdout.decode('utf-8')
+    ort_str = out.find('orient =') + 9
+    img_ort = out[ort_str:ort_str + 3]
+
+    cp_orient = False
+    if (img_ort != r_orient) and (img_ort != l_orient):
+        print("\n Warning: input image is not in RPI or LPI orientation.. "
+              "\n re-orienting image to standard orientation based on orient tags (please make sure they are correct)")
+
+        if img_ort == 'Obl':
+            img_ort = out[-5:-2]
+            orient_tag = 'RPI' if 'R' in img_ort else 'LPI'
+        else:
+            orient_tag = 'RPI' if 'R' in img_ort else 'LPI'
+        print(orient_tag)
+        orient_img(in_img_file, orient_tag, out_img_file)
+        cp_orient = True
+    return cp_orient
+
+
+def resample(image, new_shape, interpolation="linear"):
+    print("\n resampling ...")
     input_shape = np.asarray(image.shape, dtype=image.get_data_dtype())
     ras_image = reorder_img(image, resample=interpolation)
     output_shape = np.asarray(new_shape)
@@ -97,47 +135,60 @@ def resample(image, new_shape, interpolation="continuous"):
 
     return resample_img(ras_image, target_affine=new_affine, target_shape=output_shape, interpolation=interpolation)
 
+def image_mask(img, mask, img_masked):
+    print("\n skull stripping ...")
+    c3 = C3d()
+    c3.inputs.in_file = img
+    c3.inputs.args = "%s -multiply" % mask
+    c3.inputs.out_file = img_masked
+    c3.run()
 
-def extract_from_center(ventricles_img, mask_brain):
-    # smoothing
-    pred_sm = smooth_img(ventricles_img, fwhm=2)
+def image_standardize(img, mask, img_std):
+    print("\n standardization ...")
+    c3 = C3d()
+    c3.inputs.in_file = img
+    c3.inputs.args = "%s -nlw 25x25x25 %s -times -replace nan 0" % (mask, mask)
+    c3.inputs.out_file = img_std
+    c3.run()
 
-    # thresold the smoothed mask at 0.45, get the arr for more processing
-    pred_th = np.zeros_like(mask_brain.get_data())
-    pred_th[pred_sm.get_data() > 0.45] = 1
-    pred_th[pred_sm.get_data() <= 0.45] = 0
+def trim(img, out, voxels=1):
+    print("\n cropping ...")
+    c3 = C3d()
+    c3.inputs.in_file = img
+    c3.inputs.args = "-trim %svox" % voxels
+    c3.inputs.out_file = out
+    c3.run()
 
-    # center of mask, dilated
-    mask_arr = mask_brain.get_data()
-    center_of_mass = ndimage.center_of_mass(mask_arr)
-    mask_csf_ball = np.zeros_like(mask_arr)
-    mask_csf_ball[int(center_of_mass[0]), int(center_of_mass[1]), int(center_of_mass[2])] = 1
-    mask_csf_ball = ndimage.binary_dilation(mask_csf_ball, iterations=10)
+def trim_like(img, ref, out, interp = 0):
+    print("\n cropping ...")
+    c3 = C3d()
+    c3.inputs.in_file = ref
+    c3.inputs.args = "-int %s %s -reslice-identity" % (interp, img)
+    c3.inputs.out_file = out
+    c3.run()
 
-    # extract largest object
-    label_pred, nr_objects = mh.label(pred_th)
-    intersect_labels = np.unique(label_pred[mask_csf_ball])
-    pred_component = np.zeros_like(mask_brain)
-    pred_component = functools.reduce(np.logical_or, (label_pred == v for v in intersect_labels if v != 0))
-
-    # return result as nifti image
-    pred_res = nib.Nifti1Image(pred_component.astype(int), ventricles_img.get_affine(), ventricles_img.header)
-
-    return pred_res
+def copy_orient(in_img_file, ref_img_file, out_img_file):
+    print("\n copy orientation ...")
+    c3 = C3d()
+    c3.inputs.in_file = ref_img_file
+    c3.inputs.args = "%s -copy-transform -type uchar" % in_img_file
+    c3.inputs.out_file = out_img_file
+    c3.run()
 
 def main(args):
     parser = parsefn()
     subj_dir, subj, t1, fl, t2, mask, out, force = parse_inputs(parser, args)
-    # subj_dir, subj, t1, fl, mask, out, force = parse_inputs(parser, args)
+    cp_orient = False
 
     if out is None:
         prediction = '%s/%s_T1acq_nu_ventricles_pred.nii.gz' % (subj_dir, subj)
+        prediction_std_orient = '%s/%s_T1acq_nu_ventricles_pred_std_orient.nii.gz' % (subj_dir, subj)
     else:
         prediction = out
+        prediction_std_orient = "%s/%s_std_orient.nii.gz" % (subj_dir, os.path.basename(out).split('.')[0])
 
     if os.path.exists(prediction) and force is False:
         print("\n %s already exists" % prediction)
-
     else:
         start_time = datetime.now()
 
@@ -148,7 +199,7 @@ def main(args):
         if fl is None and t2 is None:
             test_seqs = [t1]
             training_mods = ["t1"]
-            model_name = 'vent_t1'
+            model_name = 'vent_t1only'
             print("\n found only t1-w, using the %s model" % model_name)
         elif t2 is None and fl:
             test_seqs = [t1, fl]
@@ -158,7 +209,7 @@ def main(args):
         else:
             test_seqs = [t1, fl, t2]
             training_mods = ["t1", "flair", "t2"]
-            model_name = 'vent'
+            model_name = 'vent_multi'
             print("\n found all 3 sequences, using the model with all 3 sequences")
 
         model_json = '%s/models/%s_model.json' % (hyper_dir, model_name)
@@ -169,6 +220,7 @@ def main(args):
             "%s model does not exist ... please download and rerun script" % model_weights
 
         # pred preprocess dir
+        print(colored("\n pre-processing ...", 'green'))
         pred_dir = '%s/pred_process' % os.path.abspath(subj_dir)
         if not os.path.exists(pred_dir):
             os.mkdir(pred_dir)
@@ -176,59 +228,89 @@ def main(args):
         # standardize intensity and mask data
         c3 = C3d()
 
-        t1_img = nib.load(t1)
+        pred_shape = [128, 128, 128]
+        # std orientations
+        r_orient = 'RPI'
+        l_orient = 'LPI'
 
-        test_data = np.zeros((1, len(training_mods), 128, 128, 128), dtype=t1_img.get_data_dtype())
+        # check orientation t1 and mask
+        t1_ort = "%s/%s_std_orient.nii.gz" % (subj_dir, os.path.basename(t1).split('.')[0])
+        cp_orient = check_orient(t1, r_orient, l_orient, t1_ort)
+        mask_ort = "%s/%s_std_orient.nii.gz" % (subj_dir, os.path.basename(mask).split('.')[0])
+        cp_orient_m = check_orient(mask, r_orient, l_orient, mask_ort)
+        in_mask = mask_ort if os.path.exists(mask_ort) else mask
 
-        # resample t1
-        res_t1 = resample(t1_img, [128, 128, 128])
-        res_t1_file = '%s/%s_resampled_128iso.nii.gz' % (pred_dir, os.path.basename(t1).split('.')[0])
-        res_t1.to_filename(res_t1_file)
+        # loading t1
+        in_t1 = t1_ort if os.path.exists(t1_ort) else t1
+        t1_img = nib.load(in_t1)
 
-        # resample mask
-        c3.inputs.in_file = mask
-        c3.inputs.args = "-resample 128x128x128mm -interpolation NearestNeighbor -as o %s -push o -copy-transform" % res_t1_file
-        res_mask_name = '%s/%s_T1acq_HfB_resampled_128iso.nii.gz' % (pred_dir, subj)
-        c3.inputs.out_file = res_mask_name
-        c3.run()
+        test_data = np.zeros((1, len(training_mods), pred_shape[0], pred_shape[1], pred_shape[2]), dtype=t1_img.get_data_dtype())
 
         for s, seq in enumerate(test_seqs):
-            # resample images
-            img = nib.load(seq)
-            res = resample(img, [128, 128, 128])
-            res_file = '%s/%s_resampled_128iso.nii.gz' % (pred_dir, os.path.basename(seq).split('.')[0])
-            if not os.path.exists(res_file):
-                res.to_filename(res_file)
+            print(colored("\n pre-processing %s" % os.path.basename(seq).split('.')[0], 'green'))
 
-            # standardize
-            c3.inputs.in_file = res_file
-            c3.inputs.args = "%s -nlw 50x50x50 %s -times -replace nan 0" % (res_mask_name, res_mask_name)
-            std_file = "%s/%s_masked_resampled_standardized.nii.gz" % (pred_dir, os.path.basename(seq).split('.')[0])
-            c3.inputs.out_file = std_file
-            # print(c3.cmdline)
-            if not os.path.exists(std_file):
+            seq_ort = "%s/%s_std_orient.nii.gz" % (subj_dir, os.path.basename(seq).split('.')[0])
+            if training_mods[s] != 't1':
+                # check orientation
+                cp_orient_seq = check_orient(seq, r_orient, l_orient, seq_ort)
+            in_seq = seq_ort if os.path.exists(seq_ort) else seq
+
+            # masked
+            seq_masked = "%s/%s_masked.nii.gz" % (pred_dir, os.path.basename(seq).split('.')[0])
+            image_mask(in_seq, in_mask, seq_masked)
+
+            # standardized
+            seq_std = "%s/%s_masked_standardized.nii.gz" % (pred_dir, os.path.basename(seq).split('.')[0])
+            image_standardize(seq_masked, in_mask, seq_std)
+
+            # cropping
+            if training_mods[s] == 't1':
+                seq_crop = '%s/%s_masked_standardized_cropped.nii.gz' % (pred_dir, os.path.basename(seq).split('.')[0])
+                trim(seq_std, seq_crop, voxels=1)
+            else:
+                seq_crop = '%s/%s_masked_standardized_cropped.nii.gz' % (pred_dir, os.path.basename(seq).split('.')[0])
+                ref_file = '%s/%s_masked_standardized_cropped.nii.gz' % (pred_dir, os.path.basename(t1).split('.')[0])
+                trim_like(seq_std, ref_file, seq_crop, interp=1)
+
+            # resampling
+            img = nib.load(seq_crop)
+            res = resample(img, [pred_shape[0], pred_shape[1], pred_shape[2]])
+            seq_res = '%s/%s_resampled.nii.gz' % (pred_dir, os.path.basename(seq).split('.')[0])
+            nib.save(res, seq_res)
+
+            if not os.path.exists(seq_res):
                 print("\n pre-processing %s" % training_mods[s])
                 c3.run()
-            std_data = nib.load(std_file)
-            test_data[0, s, :, :, :] = std_data.get_data()
+            res_data = nib.load(seq_res)
+            test_data[0, s, :, :, :] = res_data.get_data()
 
-        print("\n generating ventricle segmentation")
+        print(colored("\n generating ventricle segmentation", 'green'))
+
+        res_t1_file = '%s/%s_resampled.nii.gz' % (pred_dir, os.path.basename(t1).split('.')[0])
+        res = nib.load(res_t1_file)
 
         pred = run_test_case(test_data=test_data, model_json=model_json, model_weights=model_weights,
                              affine=res.affine, output_label_map=True, labels=1)
 
         # resample back
-        pred_res = resample_to_img(pred, t1_img)
-        pred_name = os.path.join(pred_dir, "%s_%s_pred_prob.nii.gz" % (subj, model_name))
-        nib.save(pred_res, pred_name)
+        pred_res = resample_to_img(pred, t1_img, interpolation="linear")
+        pred_prob_name = os.path.join(pred_dir, "%s_%s_pred_prob.nii.gz" % (subj, model_name))
+        nib.save(pred_res, pred_prob_name)
 
-        mask_img = nib.load(mask)
-        pred_comp = extract_from_center(pred_res, mask_img)
-        nib.save(pred_comp, prediction)
+        pred_res_th = math_img('img > 0.5', img=pred_res)
+        pred_name = os.path.join(pred_dir, "%s_%s_pred.nii.gz" % (subj, model_name))
+        nib.save(pred_res_th, pred_name)
+
+        # copy original orientation to final prediction
+        if cp_orient:
+            nib.save(pred_res_th, prediction_std_orient)
+            copy_orient(pred_name, t1, prediction)
+        else:
+            nib.save(pred_res_th, prediction)
 
         print("\n generating mosaic image for qc")
 
-        seg_qc.main(['-i','%s' % t1, '-s', '%s' % prediction, '-g', '2', '-m', '40'])
+        seg_qc.main(['-i', '%s' % t1, '-s', '%s' % prediction, '-g', '2', '-m', '40'])
 
         endstatement.main('Ventricles prediction and mosaic generation', '%s' % (datetime.now() - start_time))
 

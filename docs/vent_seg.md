@@ -4,15 +4,15 @@
 
 Watch this video tutorial:
 
-[![IMAGE ALT TEXT](https://img.youtube.com/vi/QF-1oIQ4eRA/0.jpg)](https://youtu.be/QF-1oIQ4eRA "Hipp Seg")
+[![IMAGE ALT TEXT](https://img.youtube.com/vi/QF-1oIQ4eRA/0.jpg)](https://youtu.be/QF-1oIQ4eRA "Vent Seg")
 
 -----
 
 Or follow the steps below:
 
-After opening the HippMapper GUI, click "Hippocampus" under the "Segmentation" tab. Wait for a new pop-up window to appear. The window should look like the image below.
+After opening the VentMapp3r GUI, click "Ventricle" under the "Segmentation" tab. Wait for a new pop-up window to appear. The window should look like the image below.
 
-![hippocampus pop up window](images/hipp_1.PNG)
+![ventricle pop up window](images/vent_1.PNG)
 
 Click "Select t1w" and chose your T1 image. Click "Run".
 Type your desired output name in the "out" box.
@@ -21,7 +21,7 @@ Your output file will automatically appear in your t1w folder.
 
 ## Command Line
 
-    ventmapper seg_hipp
+    ventmapper seg_vent
     
     Optional arguments:
     -s , --subj       input subject
@@ -32,9 +32,9 @@ Your output file will automatically appear in your t1w folder.
     -ss , --session   input session for longitudinal studies
     
     Examples:
-    ventmapper seg_hipp -s subjectname -b
-    ventmapper seg_hipp -t1 subject_T1_nu.nii.gz -o subject_hipp.nii.gz
+    ventmapper seg_vent -s subjectname -b
+    ventmapper seg_vent -t1 subject_T1_nu.nii.gz -o subject_vent.nii.gz
 
 The output should look like this.:
 
-![hippocampus segmentation](images/3d_snap_resize.png)
+![ventricle segmentation](images/3d_snap_resize.png)

@@ -39,7 +39,7 @@ jobs:
           command: |
 
              echo "Runing tests:"
-             docker run --entrypoint bash -it mgoubran/ventmapper -c "ventmapper seg_hipp -t1 /VentMapp3r/data/test_case/mprage.nii.gz"
+             docker run --entrypoint bash -it mgoubran/ventmapper -c "ventmapper seg_vent -t1 /VentMapp3r/data/test_case/mprage.nii.gz"
 
       - store_test_results:
           path: /home/circleci/out/tests

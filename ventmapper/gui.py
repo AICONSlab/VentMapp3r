@@ -56,10 +56,10 @@ nested_dict = {
     'Conversion': {
         'functions': {
             0: {
-                'name': 'File Type',
+                'name': 'Convert Filetype',
                 'script': 'filetype',
                 'opts': '-t filetype -v in_img -f out',
-                'helpmsg': ''
+                'helpmsg': 'Converts file to nifti GZ'
             },
         }
     },
@@ -67,7 +67,7 @@ nested_dict = {
     'Pre-Process': {
         'functions': {
             0: {
-                'name': 'Bias Correct',
+                'name': 'Bias Correction',
                 'script': 'bias_corr',
                 'opts': '-t bias_corr -v in_img -f out',
                 'helpmsg': 'Bias correct using N4'
@@ -78,10 +78,10 @@ nested_dict = {
     'Segmentation': {
         'functions': {
             0: {
-                'name': 'Hippocampus',
-                'script': 'seg_hipp',
-                'opts': '-t seg_hipp -v t1w -f out',
-                'helpmsg': 'Segments hippocampus using a trained CNN'
+                'name': 'Ventricular Segmentation',
+                'script': 'seg_vent',
+                'opts': '-t seg_vent -v t1w t2 flair mask -f out -c force',
+                'helpmsg': 'Segments the ventricular system using a trained CNN'
             },
         }
     },
@@ -91,7 +91,7 @@ nested_dict = {
             0: {
                 'name': 'Segmentation QC',
                 'script': 'seg_qc',
-                'opts': '-t seg_qc -v img seg -f out',
+                'opts': '-t seg_qc -v img seg -f out gap min alpha tile direct flip roi',
                 'helpmsg': 'Creates tiled mosaic of segmentation overlaid on structural image'
             }
         }
@@ -100,10 +100,10 @@ nested_dict = {
     'Statistics': {
         'functions': {
             0: {
-                'name': 'Hippocampal Volume Summary',
-                'script': 'stats_hp',
-                'opts': '-t stats_hp -v in_dir -f out_csv',
-                'helpmsg': 'Generates volumetric summary of hippocampus segmentations'
+                'name': 'Ventricular Sytem Volume Summary',
+                'script': 'stats_vent',
+                'opts': '-t stats_vent -v in_dir -f out_csv',
+                'helpmsg': 'Generates volumetric summary of ventricular segmentations'
             },
         }
     },

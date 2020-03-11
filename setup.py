@@ -36,12 +36,12 @@ setup(
         'git+https://github.com/keras-team/keras-contrib.git'
     ],
     install_requires=[
-        'nibabel', 'nipype', 'argparse', 'argcomplete', 'joblib', 'keras', 'nilearn', 'scikit-learn',
+        'nibabel', 'nipype', 'argparse', 'argcomplete', 'joblib', 'keras==2.2.4', 'nilearn', 'scikit-learn',
         'keras-contrib', 'pandas', 'numpy', 'plotly', 'PyQt5'
     ],
     extras_require={
-        "ventmapper": ["tensorflow>=1.4.0"],
-        "ventmapper_gpu": ["tensorflow-gpu>=1.4.0"],
+        "ventmapper": ["tensorflow==1.4.0"],
+        "ventmapper_gpu": ["tensorflow-gpu==1.4.0"],
     },
     entry_points={'console_scripts': ['ventmapper=ventmapper.cli:main']},
     keywords=[
