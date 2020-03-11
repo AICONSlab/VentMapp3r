@@ -25,11 +25,11 @@ You can see all the ventmapper commands by typing either of the following lines:
 
 Once you know the command you want to know from the list, you can see more information about the command. For example, to learn more about seg_hfb:
 
-    ventmapper seg_hipp -h
+    ventmapper seg_vent -h
     ventmapper seg_vent --help
 
-## Hippocampal volumes
-To extract hippocampal volumes use the GUI (Stats/Hippocampal Volumes) or command line:
+## Ventricular volumes
+To extract ventricular volumes use the GUI (Stats/ventricular Volumes) or command line:
 
     ventmapper stats_hp -h
 
@@ -44,7 +44,7 @@ They can also be created through the GUI or command line:
 
 The QC image should look like this:
 
-![Quality control imagefor hippocampus segmentation](images/hipp_qc_corr.png)
+![Quality control imagefor ventricular segmentation](images/vent_qc_corr.png)
 
 
 ## Logs
