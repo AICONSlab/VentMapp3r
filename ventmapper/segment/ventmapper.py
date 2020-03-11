@@ -125,7 +125,7 @@ def check_orient(in_img_file, r_orient, l_orient, out_img_file):
 
 
 def resample(image, new_shape, interpolation="linear"):
-    print("resampling")
+    print("\n resampling ...")
     input_shape = np.asarray(image.shape, dtype=image.get_data_dtype())
     ras_image = reorder_img(image, resample=interpolation)
     output_shape = np.asarray(new_shape)
