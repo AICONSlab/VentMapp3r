@@ -15,7 +15,7 @@ from ventmapper.segment import ventmapper
 from ventmapper.convert import filetype
 from ventmapper.preprocess import biascorr, trim_like
 from ventmapper.qc import seg_qc
-from ventmapper.stats import summary_hp_vols
+from ventmapper.stats import summary_vent_vols
 from ventmapper.utils.depends_manager import add_paths
 
 warnings.simplefilter("ignore")
@@ -37,8 +37,8 @@ def run_ventmapper(args):
     ventmapper.main(args)
 
 
-def run_hp_seg_summary(args):
-    summary_hp_vols.main(args)
+def run_vent_seg_summary(args):
+    summary_vent_vols.main(args)
 
 
 def run_seg_qc(args):
@@ -98,11 +98,11 @@ def get_parser():
     # --------------
 
     # vent vol seg
-    vent_vol_parser = summary_hp_vols.parsefn()
-    parser_stats_hp = subparsers.add_parser('stats_hp', add_help=False, parents=[hp_vol_parser],
+    vent_vol_parser = summary_vent_vols.parsefn()
+    parser_stats_vent = subparsers.add_parser('stats_vent', add_help=False, parents=[vent_vol_parser],
                                             help="Generates volumetric summary of ventricular segmentations",
                                             usage=vent_vol_parser.usage)
-    parser_stats_hp.set_defaults(func=run_hp_seg_summary)
+    parser_stats_vent.set_defaults(func=run_vent_seg_summary)
 
     # --------------
 
