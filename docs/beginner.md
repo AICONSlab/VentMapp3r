@@ -31,7 +31,7 @@ Once you know the command you want to know from the list, you can see more infor
 ## Ventricular volumes
 To extract ventricular volumes use the GUI (Stats/ventricular Volumes) or command line:
 
-    ventmapper stats_hp -h
+    ventmapper stats_vent -h
 
 ## QC
 QC files are automatically generated in a sub-folder within the subject folder.
