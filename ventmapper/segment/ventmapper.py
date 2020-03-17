@@ -118,7 +118,7 @@ def check_orient(in_img_file, r_orient, l_orient, out_img_file):
             orient_tag = 'RPI' if 'R' in img_ort else 'LPI'
         else:
             orient_tag = 'RPI' if 'R' in img_ort else 'LPI'
-        print(orient_tag)
+        pprint("re-orienting to %s ..." %orient_tag)
         orient_img(in_img_file, orient_tag, out_img_file)
         cp_orient = True
     return cp_orient
@@ -293,7 +293,7 @@ def main(args):
                              affine=res.affine, output_label_map=True, labels=1)
 
         # resample back
-        pred_res = resample_to_img(pred, t1_img, interpolation="linear")
+        pred_res = resample_to_img(pred, t1_img)
         pred_prob_name = os.path.join(pred_dir, "%s_%s_pred_prob.nii.gz" % (subj, model_name))
         nib.save(pred_res, pred_prob_name)
 
