@@ -118,7 +118,7 @@ def check_orient(in_img_file, r_orient, l_orient, out_img_file):
             orient_tag = 'RPI' if 'R' in img_ort else 'LPI'
         else:
             orient_tag = 'RPI' if 'R' in img_ort else 'LPI'
-        pprint("re-orienting to %s ..." %orient_tag)
+        print("re-orienting to %s ..." % orient_tag)
         orient_img(in_img_file, orient_tag, out_img_file)
         cp_orient = True
     return cp_orient
