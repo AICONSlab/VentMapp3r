@@ -10,7 +10,7 @@ To start the GUI, type
 
 A GUI that looks like the image below should appear. You can hover any of buttons in the GUI to see a brief description of the command.
 
-![Graphical user interface for the Dasher application](images/ventmapper_gui.png)
+![Graphical user interface for the VentMapper application](images/ventmapper_gui.png)
 
 You can get the command usage info by click the "Help" box on any of the pop-up windows.
 
@@ -44,7 +44,7 @@ They can also be created through the GUI or command line:
 
 The QC image should look like this:
 
-![Quality control imagefor ventricular segmentation](images/vent_qc_corr.png)
+![Quality control imagefor ventricular segmentation](images/ventricles_seg_qc.png)
 
 
 ## Logs
@@ -54,7 +54,7 @@ and can be useful if something did not work successfully.
 
 ## File conversion
 
-Convert Analyze to Nifti (or vice versa)
+To convert from one filetype to another (namely Analyze to Nifti, or vice versa)
 
     ventmapper filetype
 

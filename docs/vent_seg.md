@@ -12,7 +12,7 @@ Or follow the steps below:
 
 After opening the VentMapp3r GUI, click "Ventricle" under the "Segmentation" tab. Wait for a new pop-up window to appear. The window should look like the image below.
 
-![ventricle pop up window](images/vent_1.PNG)
+![ventricle pop up window](images/ventmapper_vent_popup.png)
 
 Click "Select t1w" and chose your T1 image. Click "Run".
 Type your desired output name in the "out" box.

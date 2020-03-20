@@ -6,9 +6,9 @@ If you intend to use Singularity, scroll down to the Singularity section. Otherw
 
 If you want to use Docker to run VentMapp3r, you must first install Docker on your system. While the installation method differs per system, instructions can be found for the following:
 
-- Ubuntu
-- Windows 7/8/10 or Windows10Pro
-- OS X
+- [Ubuntu](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
+- [Windows](https://docs.docker.com/docker-for-windows/install/)
+- [Mac](https://docs.docker.com/docker-for-mac/)
 
 Once Docker is installed, open the docker terminal and test it with the command
 
