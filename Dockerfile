@@ -53,14 +53,18 @@ RUN git clone https://github.com/mgoubran/VentMapp3r.git && \
 
 # Download models, store in directory
 RUN mkdir /VentMapp3r/models && \
-    wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1ftE79HF-sWXGa_X2bOUc-ldyWQEB5-Dz' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1ftE79HF-sWXGa_X2bOUc-ldyWQEB5-Dz" -O /VentMapp3r/models/vent_model.json && \
+    wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1enkZADLYj99_HdTF_jNxrxyFAHaXZDzf' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1enkZADLYj99_HdTF_jNxrxyFAHaXZDzf" -O /VentMapp3r/models/vent_multi_model.json && \
     rm -rf /tmp/cookies.txt && \
-    wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=19zEi7552X93_5JbEokfry2Y28gFeVGt2' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=19zEi7552X93_5JbEokfry2Y28gFeVGt2" -O /VentMapp3r/models/vent_model_weights.h5 && \
+    wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=19MI05xrdg-VuIVzvJT_dr1lixu0G3KpD' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=19MI05xrdg-VuIVzvJT_dr1lixu0G3KpD" -O /VentMapp3r/models/vent_multi_model_weights.h5 && \
     rm -rf /tmp/cookies.txt && \
-    wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1NmyniIkAk_wY2OW4YqEp9vF7IlVsRfrA' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1NmyniIkAk_wY2OW4YqEp9vF7IlVsRfrA" -O /VentMapp3r/models/vent_zoom_model.json && \
+    wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1hsur5hMyPsT7UHSUmQeN9iegL8T2ZL5O' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1hsur5hMyPsT7UHSUmQeN9iegL8T2ZL5O" -O /VentMapp3r/models/vent_t1only_model.json && \
     rm -rf /tmp/cookies.txt && \
-    wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=10uPh9byC-7Qj7Duwgh9gyQcSXH-CwWz1' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=10uPh9byC-7Qj7Duwgh9gyQcSXH-CwWz1" -O /VentMapp3r/models/vent_zoom_model_weights.h5 && \
+    wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1JBhzozGiz-mcMeF1cA9SW6PBgBTN2KSz' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1JBhzozGiz-mcMeF1cA9SW6PBgBTN2KSz" -O /VentMapp3r/models/vent_t1only_model_weights.h5 && \
+    rm -rf /tmp/cookies.txt && \
+    wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=17ecrsFi8ACVR_6f-mZ9jXTT-iCqClnCr' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=17ecrsFi8ACVR_6f-mZ9jXTT-iCqClnCr" -O /VentMapp3r/models/vent_t1fl_model.json && \
+    rm -rf /tmp/cookies.txt && \
+    wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1AveujA3q6SufALaHPVqh1nIjNQDCDXvp' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1AveujA3q6SufALaHPVqh1nIjNQDCDXvp" -O /VentMapp3r/models/vent_t1fl_model_weights.h5 && \
     rm -rf /tmp/cookies.txt
 
 # Run ventmapper when the container launches
-ENTRYPOINT /bin/bash
+ENTRYPOINT ["/opt/miniconda/bin/ventmapper"]

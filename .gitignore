@@ -108,3 +108,6 @@ models/
 
 # .idea directory
 .idea/
+
+# .vscode
+../../.vscode/
