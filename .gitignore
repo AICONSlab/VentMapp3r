@@ -110,4 +110,4 @@ models/
 .idea/
 
 # .vscode
-../../.vscode/
+.vscode/
