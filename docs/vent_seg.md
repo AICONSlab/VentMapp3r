@@ -37,4 +37,4 @@ Your output file will automatically appear in your t1w folder.
 
 The output should look like this.:
 
-![ventricle segmentation](images/3d_snap_resize.png)
+![ventricle segmentation](images/vent_seg_example.png)
