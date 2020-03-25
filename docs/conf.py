@@ -21,7 +21,7 @@
 
 project = 'VentMapp3r'
 copyright = '2018, BrainLab'
-author = 'Maged Goubran, Edward Ntiri, Melissa Holmes, Hassan Akhavein, Sandra Black'
+author = 'Maged Goubran, Edward Ntiri, Melissa Holmes, Parisa M. Forooshani, Hassan Akhavein, Sandra Black'
 
 # The short X.Y version
 version = ''
@@ -36,7 +36,7 @@ release = ''
 # needs_sphinx = '1.0'
 
 # Add any Sphinx extension module names here, as strings. They can be
-# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
+# extensions coming with sSphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
 ]
