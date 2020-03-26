@@ -6,11 +6,6 @@
 Welcome to VentMapp3r's documentation!
 ==================================
 
-.. image:: images/ventmapper_icon.png
-    :width: 550px
-    :alt: Graph abstract
-    :align: center
-
 *VentMapp3r* (pronounced ventmapper) is a CNN-based segmentation technique of the ventricular system
 using MRI images from BrainLab.
 It can deal with brains with extensive atrophy and segments the ventricles in seconds.
