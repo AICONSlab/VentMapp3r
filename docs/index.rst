@@ -9,7 +9,7 @@ Welcome to VentMapp3r's documentation!
 *VentMapp3r* (pronounced ventmapper) is a CNN-based segmentation technique of the ventricular system
 using MRI images from BrainLab.
 It can deal with brains with extensive atrophy and segments the ventricles in seconds.
-It uses a T1-weighted image as the only input and segments both with-skull and skull-stripped images.
+It can segment the ICV with either T1-weighted image as the only input, or with different combinations involving a T1, T2, and FLAIR image.
 
 .. image:: images/graph_abstract.png
     :width: 550px

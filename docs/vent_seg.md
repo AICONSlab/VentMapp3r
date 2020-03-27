@@ -15,7 +15,10 @@ After opening the VentMapp3r GUI, click "Ventricle" under the "Segmentation" tab
 ![ventricle pop up window](images/ventmapper_vent_popup.png)
 
 Click "Select t1w" and chose your T1 image. Click "Run".
+Click either or both "Select t2w" and "Select flair" (with respect to the sequences you have) and select the correspending images.
 Type your desired output name in the "out" box.
+Check the box next to "force" if you want to overwrite a previous output.
+Click "Run".
 Your output file will automatically appear in your t1w folder.
 
 
@@ -24,12 +27,15 @@ Your output file will automatically appear in your t1w folder.
     ventmapper seg_vent
     
     Optional arguments:
-    -s , --subj       input subject
-    -t1 , --t1w       input T1-weighted
-    -b, --bias        bias field correct image before segmentation
-    -o , --out        output prediction
-    -f, --force       overwrite existing segmentation
-    -ss , --session   input session for longitudinal studies
+    -h, --help            show this help message and exit
+    -s , --subj           input subject
+    -fl , --flair         input Flair
+    -t1 , --t1w           input T1-weighted
+    -t2 , --t2w           input T2-weighted
+    -m , --mask           brain mask
+    -o , --out            output prediction
+    -f, --force           overwrite existing segmentation
+    -ss , --session       input session for longitudinal studies
     
     Examples:
     ventmapper seg_vent -s subjectname -b
