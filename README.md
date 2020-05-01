@@ -5,7 +5,7 @@ It can deal with brains with extensive atrophy and segments the ventricles in se
 It uses a T1-weighted image as the only input and segments both with-skull and skull-stripped images.
 
 <p align="center">
-      <img src="docs/images/graph_abstract.png" alt="ventricular pop-up window"
+      <img src="docs/images/ventmapper_process.png" alt="ventricular pop-up window"
       width="600" height="200"/>
 </p>
 
