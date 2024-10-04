@@ -5,7 +5,13 @@ FROM ubuntu:16.04
 RUN apt-get update && apt-get install -y git wget build-essential g++ gcc cmake curl clang && \
     apt-get install -y libfreetype6-dev apt-utils pkg-config vim gfortran && \
     apt-get install -y binutils make linux-source unzip && \
-    apt install -y libsm6 libxext6 libfontconfig1 libxrender1 libgl1-mesa-glx
+    apt-get install -y apt-transport-https ca-certificates && \
+    apt install -y libsm6 libxext6 libfontconfig1 libxrender1 libgl1-mesa-glx && \
+    apt-get install -y python3-pip python3-dev && \
+    cd /usr/local/bin/ && \
+    ln -s /usr/bin/python3 python && \
+    pip3 install --upgrade pip==20.3.4 && \
+    cd ~
 
 # Install c3d
 RUN wget https://downloads.sourceforge.net/project/c3d/c3d/Nightly/c3d-nightly-Linux-x86_64.tar.gz && \
@@ -16,10 +22,10 @@ ENV PATH /opt/c3d/bin:${PATH}
 # FSL
 # Installing Neurodebian packages FSL
 RUN wget -O- http://neuro.debian.net/lists/xenial.us-tn.full | tee /etc/apt/sources.list.d/neurodebian.sources.list
-RUN apt-key adv --recv-keys --keyserver hkp://pool.sks-keyservers.net:80 0xA5D32F012649A5A9
+#RUN apt-key adv --recv-keys --keyserver hkp://pool.sks-keyservers.net:80 0xA5D32F012649A5A9
 
 # Install FSL
-RUN apt-get update && apt-get install -y fsl
+RUN apt-get update && apt-get install -y --allow-unauthenticated fsl
 
 ENV FSLDIR="/usr/share/fsl/5.0" \
     FSLOUTPUTTYPE="NIFTI_GZ" \
@@ -33,10 +39,11 @@ ENV FSLDIR="/usr/share/fsl/5.0" \
 ENV PATH="/usr/lib/fsl/5.0:${PATH}"
 
 # Install ANTs
-ENV ANTSPATH /opt/ANTs
-RUN mkdir -p /opt/ANTs && \
-    curl -sSL "https://dl.dropbox.com/s/2f4sui1z6lcgyek/ANTs-Linux-centos5_x86_64-v2.2.0-0740f91.tar.gz" \
-    | tar -xzC $ANTSPATH --strip-components 1
+ENV ANTSPATH="/opt/ANTs"
+ENV ANTSTAR="/opt/ants.tar.gz"
+RUN mkdir -p "${ANTSPATH}" && \
+    wget -q --show-progress -O "${ANTSTAR}" https://huggingface.co/datasets/AICONSlab/icvmapper/resolve/dev/software/ANTs/ANTs-Linux-centos5_x86_64-v2.2.0-0740f91.tar.gz && \
+    tar -xzvf "${ANTSTAR}" -C "${ANTSPATH}" --strip-components 1
 ENV PATH=${ANTSPATH}:${PATH}
 
 # Install miniconda
@@ -45,10 +52,13 @@ RUN curl -LO https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.
     rm Miniconda3-latest-Linux-x86_64.sh
 ENV PATH=/opt/miniconda/bin:${PATH}
 
+
+#RUN echo -e $PWD
+
 # Install all needed packages based on pip installation
 RUN git clone https://github.com/mgoubran/VentMapp3r.git && \
-    cd VentMapp3r && \
-    pip install git+https://www.github.com/keras-team/keras-contrib.git && \
+	cd VentMapp3r && \
+	pip install git+https://www.github.com/keras-team/keras-contrib.git && \
     pip install -e .[ventmapper]
 
 # Download models, store in directory
