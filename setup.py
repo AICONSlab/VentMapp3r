@@ -32,13 +32,13 @@ setup(
         'Topic :: Scientific/Engineering :: Bio-Informatics',
         'Topic :: Scientific/Engineering :: Image Recognition',
     ],
-    #dependency_links=[
-    #    'git+https://github.com/keras-team/keras-contrib.git'
-    #],
-#    install_requires=[
-#        'nibabel', 'nipype', 'argparse', 'argcomplete', 'joblib', 'keras==2.2.4', 'nilearn', 'scikit-learn',
-#        'keras-contrib', 'pandas', 'numpy', 'plotly', 'PyQt5', 'termcolor'
-#    ],
+    dependency_links=[
+        'git+https://github.com/keras-team/keras-contrib.git'
+    ],
+    install_requires=[
+        'nibabel==3.2.2', 'nipype==1.7.1', 'argparse==1.4.0', 'argcomplete==3.1.2', 'joblib==1.1.1', 'keras==2.2.4', 'nilearn==0.9.2', 'scikit-learn==0.24.2',
+        'keras-contrib==2.0.8', 'pandas==1.1.5', 'numpy==1.19.5', 'plotly==5.18.0', 'PyQt5==5.15.6', 'termcolor==1.1.0'
+    ],
     extras_require={
         "ventmapper": ["tensorflow==1.4.0"],
         "ventmapper_gpu": ["tensorflow-gpu==1.4.0"],
