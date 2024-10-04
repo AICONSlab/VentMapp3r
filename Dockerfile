@@ -7,6 +7,7 @@ RUN apt-get update && apt-get install -y git wget build-essential g++ gcc cmake 
     apt-get install -y binutils make linux-source unzip && \
     apt-get install -y apt-transport-https ca-certificates && \
     apt install -y libsm6 libxext6 libfontconfig1 libxrender1 libgl1-mesa-glx && \
+    apt install -y python3-setuptools && \
     apt-get install -y python3-pip python3-dev && \
     cd /usr/local/bin/ && \
     ln -s /usr/bin/python3 python && \
