@@ -32,9 +32,9 @@ setup(
         'Topic :: Scientific/Engineering :: Bio-Informatics',
         'Topic :: Scientific/Engineering :: Image Recognition',
     ],
-    dependency_links=[
-        'git+https://github.com/keras-team/keras-contrib.git'
-    ],
+    #dependency_links=[
+    #    'git+https://github.com/keras-team/keras-contrib.git'
+    #],
 #    install_requires=[
 #        'nibabel', 'nipype', 'argparse', 'argcomplete', 'joblib', 'keras==2.2.4', 'nilearn', 'scikit-learn',
 #        'keras-contrib', 'pandas', 'numpy', 'plotly', 'PyQt5', 'termcolor'
