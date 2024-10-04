@@ -56,7 +56,8 @@ ENV PATH=/opt/miniconda/bin:${PATH}
 #RUN echo -e $PWD
 
 # Install all needed packages based on pip installation
-RUN git clone https://github.com/mgoubran/VentMapp3r.git && \
+
+RUN git clone -b dummy --single-branch https://github.com/mgoubran/VentMapp3r.git && \
 	cd VentMapp3r && \
 	pip install git+https://www.github.com/keras-team/keras-contrib.git && \
     pip install -e .[ventmapper]
