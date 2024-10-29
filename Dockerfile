@@ -60,8 +60,8 @@ ENV PATH=/opt/miniconda/bin:${PATH}
 
 RUN git clone -b dummy --single-branch https://github.com/mgoubran/VentMapp3r.git
 RUN	cd VentMapp3r && \
-	pip install git+https://www.github.com/keras-team/keras-contrib.git
-RUN pip install -e .[ventmapper]
+	pip install git+https://www.github.com/keras-team/keras-contrib.git && \
+    pip install -e .[ventmapper]
 
 # Download models, store in directory
 RUN mkdir /VentMapp3r/models && \
